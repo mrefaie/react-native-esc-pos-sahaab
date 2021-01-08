@@ -32,10 +32,9 @@ android {
     minSdkVersion 16
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
-    versionName "1.0"
-    
+    versionName '1.0'
   }
-  
+
   buildTypes {
     release {
       minifyEnabled false
@@ -116,7 +115,7 @@ repositories {
   if (!found) {
     throw new GradleException(
             "${project.name}: unable to locate React Native android sources. " +
-                    "Ensure you have you installed React Native as a dependency in your project and try again."
+                    'Ensure you have you installed React Native as a dependency in your project and try again.'
     )
   }
 }
@@ -125,6 +124,8 @@ def kotlin_version = getExtOrDefault('kotlinVersion')
 
 dependencies {
   // noinspection GradleDynamicVersion
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation 'org.apache.commons:commons-lang3:3.4'
 }
