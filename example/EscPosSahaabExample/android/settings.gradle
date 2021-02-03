@@ -1,0 +1,6 @@
+rootProject.name = 'EscPosSahaabExample'
+apply from: file('../node_modules/@react-native-community/cli-platform-android/native_modules.gradle'); applyNativeModulesSettingsGradle(settings)
+include ':app'
+
+include ':react-native-esc-pos'
+project(':react-native-esc-pos').projectDir = new File(rootProject.projectDir, 	'../../../android')
