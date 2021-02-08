@@ -24,10 +24,16 @@ import java.lang.Math;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.nio.charset.Charset;
+import 	java.nio.ByteBuffer;
+
 import sahaab.reactnativeescpos.command.PrinterCommand;
 import sahaab.reactnativeescpos.helpers.EscPosHelper;
 import sahaab.reactnativeescpos.utils.BitMatrixUtils;
 import static io.github.escposjava.print.Commands.*;
+import sahaab.reactnativeescpos.CharMapper864;
+
+import java.util.ArrayList;
 
 public class PrinterService {
     public static final int PRINTING_WIDTH_58_MM = 384;
@@ -44,6 +50,8 @@ public class PrinterService {
     private final int DEFAULT_BAR_CODE_FORMAT = 73;//CODE-128
     private final int DEFAULT_BAR_CODE_FONT = 0;
     private final int DEFAULT_BAR_CODE_POSITION = 2;
+    
+    private int codePage = 22;
 
     private int printingWidth = PRINTING_WIDTH_58_MM;
     private io.github.escposjava.PrinterService basePrinterService;
@@ -58,6 +66,11 @@ public class PrinterService {
         this.printingWidth = printingWidth;
     }
 
+    public void setCodePage(int c)
+    {
+        this.codePage = c;
+    }
+
     public void cutPart() {
         basePrinterService.cutPart();
     }
@@ -68,6 +81,13 @@ public class PrinterService {
 
     public void print(String text) throws UnsupportedEncodingException {
         // TODO: get rid of GBK default!
+        // CharMapper864 c = new CharMapper864();
+        // ArrayList<Integer> list = c.getCodes(text);
+        // byte[] bytes = new byte[list.size()];
+        // for (int i = 0; i < list.size(); i++) {
+        //     bytes[i] = (byte) list.get(i).intValue();
+        // }
+        // // baos.write(bytes);
         write(text.getBytes("GBK"));
     }
 
@@ -272,7 +292,8 @@ public class PrinterService {
             int charsOnLine = layoutBuilder.getCharsOnLine();
 
             // TODO: Shouldn't put it here
-            byte[] ESC_t = new byte[] { 0x1b, 't', 0x00 };
+            byte[] ESC_t = new byte[] { 0x1b, 0x74, (byte)this.codePage };
+            byte[] ESC_Chinese_Mode = new byte[] { 0x1b, 0x39, 1 };
             byte[] ESC_M = new byte[] { 0x1b, 'M', 0x00 };
             byte[] FS_and = new byte[] { 0x1c, '&' };
             byte[] TXT_NORMAL_NEW = new byte[] { 0x1d, '!', 0x00 };
@@ -284,7 +305,8 @@ public class PrinterService {
             byte[] DEFAULT_LINE_SPACE = new byte[] { 0x1b, 50 };
 
             baos.write(ESC_t);
-            baos.write(FS_and);
+            // baos.write(ESC_Chinese_Mode);
+            // baos.write(FS_and);
             baos.write(ESC_M);
 
             // Add tags
@@ -327,6 +349,8 @@ public class PrinterService {
                 line = line.replace("{R}", "");
             }
 
+            
+            
             try {
                 if (qtToWrite != null) {
                     baos.write(qtToWrite);
@@ -339,7 +363,18 @@ public class PrinterService {
                 }
                 if (qtToWrite == null && imageToWrite == null && bcToWrite == null) {
                     // TODO: get rid of GBK default!
-                    baos.write(layoutBuilder.createFromDesign(line, charsOnLine).getBytes("GBK"));
+                    // layoutBuilder.createFromDesign(line, charsOnLine)
+                    // Charset c = new Charset.forName("cp864");
+//                     ByteBuffer buf = Charset.forName("cp864").encode("الله اكبر").array();
+// byte[] arr = new byte[buf.remaining()];
+// buf.get(arr);
+                    CharMapper864 c = new CharMapper864();
+                    ArrayList<Integer> list = c.getCodes(layoutBuilder.createFromDesign(line, charsOnLine));
+                    byte[] bytes = new byte[list.size()];
+                    for (int i = 0; i < list.size(); i++) {
+                        bytes[i] = (byte) list.get(i).intValue();
+                    }
+                    baos.write(bytes);
                 }
             } catch (UnsupportedEncodingException e) {
                 // Do nothing?

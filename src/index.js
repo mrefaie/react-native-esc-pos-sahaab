@@ -1,4 +1,5 @@
-import { DeviceEventEmitter, NativeModules } from 'react-native';
+import { DeviceEventEmitter, NativeModules } from "react-native";
+import iconv from "iconv-lite";
 
 const { LayoutBuilder } = NativeModules;
 
@@ -6,13 +7,13 @@ const EscPos = {
   ...NativeModules.EscPos,
   addListener(eventName, cb) {
     switch (eventName) {
-      case 'bluetoothStateChanged':
+      case "bluetoothStateChanged":
         EscPos.initBluetoothConnectionListener();
-        DeviceEventEmitter.addListener('bluetoothStateChanged', cb);
+        DeviceEventEmitter.addListener("bluetoothStateChanged", cb);
         break;
 
-      case 'bluetoothDeviceFound':
-        DeviceEventEmitter.addListener('bluetoothDeviceFound', cb);
+      case "bluetoothDeviceFound":
+        DeviceEventEmitter.addListener("bluetoothDeviceFound", cb);
         break;
 
       default:

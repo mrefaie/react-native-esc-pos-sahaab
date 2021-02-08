@@ -20,19 +20,23 @@
     "react-native",
     "thermal printer"
   ],
-  "main": "index.js",
-  "source": "index",
-  "react-native": "index",
+  "main": "src/index.js",
+  "source": "src",
+  "react-native": "src",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "example": "yarn --cwd example/EscPosSahaabExample"
   },
   "devDependencies": {
-    "react": "^16.5.0",
-    "react-native": "^0.59.4"
+    "react": "16.13.1",
+    "react-native": "0.63.4"
   },
   "peerDependencies": {
-    "react": "^16.5.0",
+    "react": ">=16.5.0",
     "react-native": ">=0.57.0-rc.0 <1.0.x"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "iconv-lite": "^0.6.2"
   }
 }

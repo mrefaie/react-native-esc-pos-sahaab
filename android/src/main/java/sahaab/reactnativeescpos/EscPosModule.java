@@ -66,6 +66,13 @@ public class EscPosModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void setCodePage(int c, Promise promise)
+    {
+        printerService.setCodePage(c);
+        promise.resolve(true);
+    }
+
+    @ReactMethod
     public void cutPart(Promise promise) {
         printerService.cutPart();
         promise.resolve(true);
