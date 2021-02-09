@@ -49,7 +49,7 @@ D0004           {<>}           Table #: A1
         console.log('connecting to printer!');
         // Connects to your printer
         // If you use `bluetooth`, second parameter is not required.
-        await EscPos.connect('192.168.1.87', 9100);
+        await EscPos.connect('102.187.116.212', 9100);
 
         // Once connected, you can setup your printing size, either `PRINTING_SIZE_58_MM`, `PRINTING_SIZE_76_MM` or `PRINTING_SIZE_80_MM`
         EscPos.setPrintingSize(EscPos.PRINTING_SIZE_80_MM);

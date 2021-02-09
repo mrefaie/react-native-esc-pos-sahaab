@@ -296,6 +296,7 @@ public class PrinterService {
             byte[] ESC_Chinese_Mode = new byte[] { 0x1b, 0x39, 1 };
             byte[] ESC_M = new byte[] { 0x1b, 'M', 0x00 };
             byte[] FS_and = new byte[] { 0x1c, '&' };
+            byte[] FS_dot = new byte[] { 0x1c, 0x2e };
             byte[] TXT_NORMAL_NEW = new byte[] { 0x1d, '!', 0x00 };
             byte[] TXT_4SQUARE_NEW = new byte[] { 0x1d, '!', 0x11 };
             byte[] TXT_2HEIGHT_NEW = new byte[] { 0x1d, '!', 0x01 };
@@ -306,7 +307,7 @@ public class PrinterService {
 
             baos.write(ESC_t);
             // baos.write(ESC_Chinese_Mode);
-            // baos.write(FS_and);
+            baos.write(FS_dot);
             baos.write(ESC_M);
 
             // Add tags
