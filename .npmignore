@@ -11,3 +11,9 @@ config.gypi
 CVS
 example
 .editorconfig
+node_modules
+.idea
+.gradle
+android/build
+android/.gradle
+lib
