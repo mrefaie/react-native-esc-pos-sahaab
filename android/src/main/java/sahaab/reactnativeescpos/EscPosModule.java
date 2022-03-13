@@ -15,6 +15,8 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.ReadableArray;
+
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -181,7 +183,11 @@ public class EscPosModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void write(byte[] command, Promise promise) {
+    public void write(ReadableArray message, Promise promise) {
+        byte[] command = new byte[message.size()];
+        for (int i = 0; i < message.size(); i++) {
+            command[i] = new Integer(message.getInt(i)).byteValue();
+        }
         printerService.write(command);
         promise.resolve(true);
     }

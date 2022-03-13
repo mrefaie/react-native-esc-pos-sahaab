@@ -1,6 +1,9 @@
 package sahaab.reactnativeescpos;
 
 import java.util.ArrayList;
+import java.lang.*;
+import java.io.*;
+import java.util.*;
 
 /**
  * This class is the "naive" and "handy" implementation of Unicode Bidirectional Algorithm.
@@ -20,6 +23,37 @@ public class BidiStringBreaker {
 		if (s==null || s.length()==0) return errArray();
 		ArrayList<String> res = new ArrayList<String>();
 		
+		if(containsFarsi(s))
+		{
+			StringBuilder input1 = new StringBuilder();
+			input1.append(s);
+			input1.reverse();
+			String reversed = input1.toString();
+
+			int i = 0;
+
+			StringBuilder temp = new StringBuilder();
+
+			while(i<reversed.length())
+			{
+				StringBuilder input2 = new StringBuilder();
+				int kind = getKind(reversed, i);
+				while(i<reversed.length() && getKind(reversed, i) == kind)
+				{
+					input2.append(reversed.charAt(i));
+					i++;
+				}
+				input2.reverse();
+				temp.append(input2.toString());
+				
+			}
+
+			s = temp.toString();
+
+		}
+
+		
+
 		int ix = 0;
 		int kind = getKind(s, 0);
 		int i = 1;
@@ -38,6 +72,19 @@ public class BidiStringBreaker {
 		}
 		res.add(s.substring(ix, i));
 		return res;
+	}
+
+	private boolean containsFarsi(String s)
+	{
+		int i = 1;
+		while(i<s.length()){
+			if(getKind(s, i) == CFarsi)
+			{
+				return true;
+			}
+			i++;
+		}
+		return false;
 	}
 
 	private ArrayList<String> errArray() {

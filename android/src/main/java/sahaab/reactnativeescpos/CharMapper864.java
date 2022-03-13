@@ -41,6 +41,7 @@ public class CharMapper864 {
 
 	protected int isolatedForm(char c) {
 		if (c=='ا') return 0xc7;
+		if (c=='أ') return 0xc3;
 		if (c=='آ') return 0xc2;
 		if (c=='ب') return 0xa9;
 		if (c=='ت') return 0xaa;
@@ -75,6 +76,7 @@ public class CharMapper864 {
 
 	protected int initialForm(char c) {
 		if (c=='ا') return 0xc7;
+		if (c=='أ') return 0xc3;
 		if (c=='آ') return 0xc2;
 		if (c=='ب') return 0xc8;
 		if (c=='ت') return 0xca;
@@ -109,6 +111,9 @@ public class CharMapper864 {
 	
 	protected int otherChars(char c) {
 		//TODO more characters such as Arabic question mark (?) may be added here.		
+		if (c=='ﻰ') return 0xf5;
+		if (c=='ﻲ') return 0xf6;
+		if (c=='ة') return 0xc9;
 		if (c=='،') return 0xf8;
 		return 0x5f;
 	}

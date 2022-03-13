@@ -1,6 +1,7 @@
 package sahaab.reactnativeescpos;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
@@ -293,7 +294,7 @@ public class PrinterService {
 
             // TODO: Shouldn't put it here
             byte[] ESC_t = new byte[] { 0x1b, 0x74, (byte)this.codePage };
-            byte[] ESC_Chinese_Mode = new byte[] { 0x1b, 0x39, 1 };
+            byte[] ESC_Chinese_Mode = new byte[] { 0x1b, 0x39, 0 }; // GBK
             byte[] ESC_M = new byte[] { 0x1b, 'M', 0x00 };
             byte[] FS_and = new byte[] { 0x1c, '&' };
             byte[] FS_dot = new byte[] { 0x1c, 0x2e };
@@ -306,7 +307,8 @@ public class PrinterService {
             byte[] DEFAULT_LINE_SPACE = new byte[] { 0x1b, 50 };
 
             baos.write(ESC_t);
-            // baos.write(ESC_Chinese_Mode);
+            baos.write(ESC_Chinese_Mode);
+            baos.write(FS_and);
             baos.write(FS_dot);
             baos.write(ESC_M);
 
@@ -403,9 +405,17 @@ public class PrinterService {
         return baos;
     }
 
+    private Bitmap pad(Bitmap Src, int padding_x, int padding_y) {
+        Bitmap outputimage = Bitmap.createBitmap(Src.getWidth() + padding_x,Src.getHeight() + padding_y, Bitmap.Config.ARGB_8888);
+        Canvas can = new Canvas(outputimage);
+        can.drawARGB(0xFF,0xFF,0xFF,0xFF); //This represents White color
+        can.drawBitmap(Src, padding_x, padding_y, null);
+        return outputimage;
+    }
+
     private ByteArrayOutputStream generateImageByteArrayOutputStream(Bitmap image) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
+        image = pad(image, (int)((printingWidth-image.getWidth()) / 2), 0);
         baos.write(LINE_SPACE_24);
         for (int y = 0; y < image.getHeight(); y += 24) {
             baos.write(SELECT_BIT_IMAGE_MODE); // bit mode
